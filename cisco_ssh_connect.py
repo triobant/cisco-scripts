@@ -14,12 +14,42 @@ import getpass
 
 
 def main():
-    hostname = input("Enter the hostname of the switch: ")
-    username = input("Enter the SSH username (default is 'admin'): ") or "admin"
-    password = getpass.getpass("Enter the password: ")
+    num_switches = int(input("Enter the number of Cisco switches to connect to: "))
 
 
-    ssh_connect(hostname, username, password)
+    if num_switches == 1:
+        hostname = input("Enter the hostname of the switch: ")
+        username = input("Enter the SSH username (default is 'admin'): ") or "admin"
+        password = getpass.getpass("Enter the password: ")
+
+
+        ssh_connect(hostname, username, password)
+
+
+    elif num_switches > 1:
+        switches = []
+        for i in range(num_switches):
+            switch = input(f"Enter the hostname of the switch #{i+1}: ")
+            switches.append(switch)
+
+
+        threads = []
+        for switch in switches:
+            username = input(f"Enter the SSH username for {switch} (default is 'admin'): ") or "admin"
+            password = getpass.getpass("Enter the password for {switch}: ")
+
+            
+            thread = threading.Thread(target=ssh_connect, args=(switch, username, password))
+            threads.append(thread)
+            thread.start()
+
+
+        for thread in threads:
+            thread.join()
+
+
+    else:
+        print("Invalid number of switches. Please enter a valid number.")
 
 
 def ssh_connect(hostname, username, password):
@@ -55,6 +85,7 @@ def ssh_connect(hostname, username, password):
 
     finally:
         client.close()
+
 
 if __name__ == '__main__':
     main()
