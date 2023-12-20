@@ -28,7 +28,14 @@ def ssh_connect(hostname, username, password):
 
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(hostname, username=username, password=password, allow_agent=False, look_for_keys=False, timeout=10)
+        client.connect(
+                hostname,
+                username=username,
+                password=password, 
+                allow_agent=False,
+                look_for_keys=False,
+                timeout=10
+        )
 
 
         stdin, stdout, stderr = client.exec_command("show version")
