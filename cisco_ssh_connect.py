@@ -36,7 +36,7 @@ def main():
         threads = []
         for switch in switches:
             username = input(f"Enter the SSH username for {switch} (default is 'admin'): ") or "admin"
-            password = getpass.getpass("Enter the password for {switch}: ")
+            password = getpass.getpass(f"Enter the password for {switch}: ")
 
             
             thread = threading.Thread(target=ssh_connect, args=(switch, username, password))
