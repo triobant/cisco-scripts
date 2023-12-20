@@ -16,10 +16,11 @@ import getpass
 def main():
     hostname = input("Enter the hostname of the switch: ")
     username = input("Enter the SSH username (default is 'admin'): ") or "admin"
-    password = getpass.getpass("Enter the SSH password: ")
+    password = getpass.getpass("Enter the password: ")
 
 
     ssh_connect(hostname, username, password)
+
 
 def ssh_connect(hostname, username, password):
     try:
@@ -27,7 +28,7 @@ def ssh_connect(hostname, username, password):
 
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(hostname, username=username, password=password, timeout=10)
+        client.connect(hostname, username=username, password=password, allow_agent=False, look_for_keys=False, timeout=10)
 
 
         stdin, stdout, stderr = client.exec_command("show version")
